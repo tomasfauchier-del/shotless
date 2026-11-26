@@ -1,5 +1,5 @@
 // SHOTLESS – hors ligne. Change VERSION à chaque mise à jour.
-const VERSION='shotless-v1';
+const VERSION='shotless-v2';
 const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(VERSION).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==VERSION).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));

@@ -23,7 +23,8 @@
    PICTURE: the live card deck itself, with 3D flips and a fanned hero deck
    COLOUR and TYPE: deep black, electric violet, neon pink, white / Unbounded,sans-serif + Outfit,system-ui,sans-serif
    LAYOUT: one phone-width column, centred on large screens */
-:root{color-scheme:dark;--bg:#07060c;--ink:#fff;--mut:#b3acd0;--v:#8b3dff;--p:#ff2fb3;--line:rgba(255,255,255,.11);--panel:rgba(255,255,255,.055);--cw:min(72vw,310px,calc((100dvh - 330px)/1.4))}
+:root{color-scheme:dark;--bg:#07060c;--ink:#fff;--mut:#b3acd0;--v:#8b3dff;--p:#ff2fb3;--line:rgba(255,255,255,.11);--panel:rgba(255,255,255,.055);--cw:max(200px,min(72vw,310px,calc((100dvh - 300px)/1.4)))}
+[hidden]{display:none!important}
 :root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
 html,body{min-height:100%}
@@ -147,7 +148,7 @@ input[type=range]{flex:1;accent-color:var(--p);height:44px}
 .tag .tn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lvb{font:800 11px Unbounded,sans-serif;padding:7px 10px;border-radius:99px;background:rgba(255,255,255,.92);color:#2a0b4d;white-space:nowrap}
 .lvb:empty{display:none}
-.f-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;position:relative;z-index:1}
+.f-body{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:12px;position:relative;z-index:1}
 .kind{font:900 clamp(24px,7.5vw,34px)/1 Unbounded,sans-serif;text-shadow:0 2px 16px rgba(0,0,0,.25)}
 .kind:empty{display:none}
 .txt{margin:0;font:700 clamp(19px,5.6vw,25px)/1.28 Outfit,system-ui,sans-serif;text-shadow:0 1px 10px rgba(0,0,0,.25);text-wrap:pretty}
@@ -455,8 +456,10 @@ function paint(c){
  F.querySelector('.kind').textContent=c.k||(c.cat==='quiz'?'Quiz':'');
  const tx=F.querySelector('.txt');tx.textContent=c.t;tx.classList.toggle('sm',c.t.length>105);
  F.querySelector('.num').textContent='#'+G.i;
- if(c.a){const r=F.querySelector('.reveal'),an=F.querySelector('.ans');r.hidden=false;an.querySelector('b').textContent=c.a;r.onclick=e=>{e.stopPropagation();r.hidden=true;an.hidden=false;beep(990,.12,'triangle',.08,1320)}}
+ requestAnimationFrame(fitTxt);
+ if(c.a){const r=F.querySelector('.reveal'),an=F.querySelector('.ans');r.hidden=false;an.querySelector('b').textContent=c.a;r.onclick=e=>{e.stopPropagation();r.hidden=true;an.hidden=false;fitTxt();beep(990,.12,'triangle',.08,1320)}}
 }
+function fitTxt(){const b=F.querySelector('.f-body'),t=F.querySelector('.txt');if(!b||!t)return;t.style.fontSize='';let s=parseFloat(getComputedStyle(t).fontSize);while(b.scrollHeight>b.clientHeight+1&&s>12){s-=1;t.style.fontSize=s+'px'}}
 function draw(){
  if(busy||!G)return;
  if(G.i>=G.deck.length){finish();return}
